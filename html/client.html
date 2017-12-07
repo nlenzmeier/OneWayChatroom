@@ -1,0 +1,90 @@
+<!--
+Nicolle Lenzmeier
+CS4850
+Lab 3
+Description: a simple chatroom that includes a client and a server side
+            This file serves as the chatroom. Here you are able to send a 
+            message and see it displayed in the chat (after it is read by socket).
+            Most of this code is self-explanatory and it is just simple HTML and CSS
+-->
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>WebSocket Chat</title>
+        <meta charset="utf-8">
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font: 13px Helvetica, Arial; }
+          form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+          form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+          form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+          #messages { list-style-type: none; margin: 0; padding: 0; }
+          #messages li { padding: 5px 10px; }
+          #messages li:nth-child(odd) { background: #eee; }
+          #messages { margin-bottom: 40px }
+        </style>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+          $(function(){
+              var socket = io(); 
+              
+              //returns the value of a specified cookie:
+              function getCookie(cname) {
+                var name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for(var i = 0; i <ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+              }
+                
+              //Testing purposes
+              //console.log("all cookies: " + document.cookie);
+              //console.log("Your name is : " + getCookie("username"));
+              
+              var you = getCookie("username");
+              console.log(you);
+              
+              
+              if (you != null) {
+                  document.getElementById("username").innerHTML = "Hello, " + you + "!";
+                }
+              
+              
+              $('form').submit(function(){
+                  //send message to server for processing
+                  socket.emit('chat message', $("#message").val());
+                  $("#message").val("");
+                  return false;
+              });
+              //if anyone sends a message, update the user interface
+              socket.on('chat message', function(msg){
+                  console.dir(msg);
+                  $("#messages").append($("<li>").text(msg));
+              });
+          });
+        </script>
+	</head>
+	<body>
+        <br>
+        <h1 style="color: blue;">Lab 3 Version 1</h1>
+        <br>
+        <hr>
+        <br>
+        <h2 style="color: green;" id="username"></h2>
+        
+		<form>
+			<input type="text" id="message" autocomplete="off" autofocus><button>Send</button>
+		</form>
+		<ul id="messages"></ul>
+	</body>
+</html>

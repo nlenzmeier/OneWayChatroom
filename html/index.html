@@ -1,0 +1,71 @@
+<!--
+Nicolle Lenzmeier
+CS4850 
+Lab 3
+Description: A simple chatroom that includes a client and a server side.
+            This file is the login page where you can either create a new account,
+            or log in to an existing account. 
+            This page also creates a cookie that allows client.html to have access the the username
+            given by the user.
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Task Manager</title>
+    
+    <script>
+        function handleCookie(){
+            var you = document.getElementById("username").value;
+            document.cookie = "username=" + you;
+        }
+        
+        function handleReturningCookie(){
+            var you = document.getElementById("returningUsername").value;
+            document.cookie = "username=" + you;
+        }
+        
+    </script>
+    
+</head>
+
+<body>
+    
+    <h1>New user? Sign up now!</h1>
+    <form method="post" onsubmit="handleCookie()" role="form" action="/create">
+        <label for="username">Username</label>
+        <input type="text" name="username" maxlength="32" id="username" placeholder="Username" required/>
+        <br>
+        
+        <label for="password">Password</label>
+        <input type="password" name="password" minlength="4" maxlength="8" placeholder="Password" required/>
+        <br>
+        
+        <br><br>
+        <input type="submit" name="submit" class="btn btn-primary"/>
+    </form>
+    
+
+    <h1>Returning member? Welcome back!</h1>
+    <form method="post" onsubmit="handleReturningCookie()" role="form" action="/login">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="returningUsername" placeholder="Username" required/>
+        <br>
+        
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Password" required/>
+        <br>
+        
+        <br><br>
+        <input type="submit" name="submit" class="btn btn-primary"/>
+    </form>
+    
+    
+    
+</body>
+
+</html>
